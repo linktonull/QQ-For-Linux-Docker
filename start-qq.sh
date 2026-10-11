@@ -1,0 +1,30 @@
+podman run --name qq \
+        -d --cap-add=SYS_ADMIN \
+        --userns=keep-id \
+        --group-add keep-groups \
+        --security-opt label=disable \
+        --security-opt=no-new-privileges \
+        --dns 223.6.6.6 \
+        --dns 223.5.5.5 \
+        -v "<数据存储路径>:/home/user:Z,U" \
+        -v /tmp/.X11-unix:/tmp/.X11-unix \
+        -v /run/user/$(id -u)/bus:/run/user/$(id -u)/bus \
+        -v /run/user/$(id -u)/wayland-0:/run/user/$(id -u)/wayland-0 \
+        -v /run/user/$(id -u)/wayland-0.lock:/run/user/$(id -u)/wayland-0.lock \
+        -v /run/user/$(id -u)/pulse:/run/user/$(id -u)/pulse \
+        --device /dev/dri \
+        --device /dev/snd \
+        -e PULSE_SERVER=unix:/run/user/$(id -u)/pulse/native \
+        -e PIPEWIRE_RUNTIME_DIR=/run/user/$(id -u) \
+        -e XDG_RUNTIME_DIR=/run/user/$(id -u) \
+        -e DISPLAY=$DISPLAY \
+        -e DBUS_SESSION_BUS_ADDRESS="$DBUS_SESSION_BUS_ADDRESS" \
+        -e UID=$(id -u) \
+        -e WAYLAND_DISPLAY=$WAYLAND_DISPLAY \
+        -e XDG_SESSION_TYPE=$XDG_SESSION_TYPE \
+        -e LANG=zh_CN.UTF-8 \
+        -e TZ=Asia/Shanghai \
+        -e XMODIFIERS \
+        -e QT_IM_MODULE \
+        -e GTK_IM_MODULE \
+        qq-debian-stable:latest
